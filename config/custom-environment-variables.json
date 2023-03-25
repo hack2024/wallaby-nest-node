@@ -1,0 +1,6 @@
+{
+    "http" : {
+        "host": "PROD_HOST",
+        "port": "PROD_PORT"
+    }
+}

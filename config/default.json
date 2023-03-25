@@ -1,0 +1,21 @@
+{
+  "http": {
+    "host": "localhost",
+    "port": "8080"
+  },
+
+  "axios": {
+    "weather": {
+      "method": "GET",
+      "url": "https://dataservice.accuweather.com/forecasts/v1/daily/1day/1236863?apikey=zpsba1ULzaxvzcikdJiDr0ztADYHe5nw&language=es-AR",
+      "timeout": 3000
+    }
+  },
+
+  "circuitBreakers": {
+    "weather": {
+      "errorThresholdPercentage": 10,
+      "resetTimeout": 10000
+    }
+  }
+}
