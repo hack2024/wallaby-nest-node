@@ -1,42 +1,38 @@
 module.exports = function() {
-    return {
-      files: [
-        'src/**/*.js', 
-        '!src/**/*.spec.js'
-      ],
-  
-      tests: ['src/**/*.spec.js'],
-  
-      setup: wallaby => {
-        const mocha = wallaby.testFramework;
-  
-        const chai = require('chai');
-        const sinon = require('sinon');
-  
-        chai.use(require('sinon-chai'));
-  
-        // setup sinon hooks
-        mocha.suite.beforeEach('sinon before', function() {
-          if (null == this.sinon) {
-            this.sinon = sinon.createSandbox();
-          }
+  return {
+    files: [
+      'tsconfig.json',
+      'src/**/*.ts', 
+      'test/**/*.ts',
+      '!test/**/*.spec.ts'
+    ],
+
+    tests: [
+      'test/**/*.spec.ts',
+      '!test/e2e/**/*.spec.ts'
+    ],
+
+    setup: wallaby => {
+      if (!global._tsconfigPathsRegistered) {
+        const tsConfigPaths = require('tsconfig-paths');
+        const tsconfig = require('./tsconfig.json');
+        tsConfigPaths.register({
+          baseUrl: tsconfig.compilerOptions.baseUrl,
+          paths: tsconfig.compilerOptions.paths
         });
-        mocha.suite.afterEach('sinon after', function() {
-          if (this.sinon && 'function' === typeof this.sinon.restore) {
-            this.sinon.restore();
-          }
-        });
-  
-        global.expect = require('chai').expect;
-      },
-  
-      testFramework: 'mocha',
-  
-      env: {
-        type: 'node',
-        runner: 'node'
-      },
-  
-      workers: { recycle: true }
-    };
+        global._tsconfigPathsRegistered = true;
+      }
+
+      global.expect = require('chai').expect;
+    },
+
+    testFramework: 'mocha',
+
+    env: {
+      type: 'node',
+      runner: 'node'
+    },
+
+    workers: { recycle: true }
   };
+};
